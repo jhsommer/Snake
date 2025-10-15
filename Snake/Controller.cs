@@ -2,7 +2,8 @@ namespace Snake;
 
 public class Controller
 {
-    private Snake _pawn =  new Snake();
+    
+    internal Snake _pawn =  new Snake();
 
     public void Initialize()
     {
