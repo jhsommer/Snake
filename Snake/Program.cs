@@ -9,7 +9,7 @@ class Program
     
     private static readonly Controller Controller = Controller.Instance;
     private static readonly GameManager GameManager = GameManager.Instance;
-    private static bool _gameOver = false;
+    private static bool GameOver = false;
 
     private static void Main()
     {
@@ -23,12 +23,12 @@ class Program
         int fruitX = 0;
         int fruitY = 0;
 
-        while (!_gameOver)
+        while (!GameOver)
         {
             if (Controller._pawn.GetHeadPositionX() < 0 || Controller._pawn.GetHeadPositionX() >= Width ||
                 Controller._pawn.GetHeadPositionY() < 0 || Controller._pawn.GetHeadPositionY() >= Height)
             {
-                _gameOver = true;
+                GameOver = true;
             }
             
             for (int i = 0; i < snakeTailLength; i++)
@@ -36,7 +36,7 @@ class Program
                 if (snakeTailX[i] == Controller._pawn.GetHeadPositionX() &&
                     snakeTailY[i] == Controller._pawn.GetHeadPositionY())
                 {
-                    _gameOver = true;
+                    GameOver = true;
                 }
             }
             
