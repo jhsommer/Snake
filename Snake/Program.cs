@@ -9,10 +9,14 @@ class Program
 
     private static void Main()
     {
+        //Console.WriteLine("Hello World!");
         Controller controller = new Controller();
+        
+        controller._pawn.SetHeadPositionX(Width / 2);
+        controller._pawn.SetHeadPositionY(Height / 2);
         bool gameOver = false;
 
-        int snaikTailLength = 0;
+        int snakeTailLength = 0;
         int [] snakeTailX = new int[100];
         int [] snakeTailY = new int[100];
         
@@ -20,7 +24,7 @@ class Program
         int fruitY = 0;
 
         GameManager gameManager = new GameManager();
-        gameManager.Start();
+        //gameManager.Start();
 
         while (!gameOver)
         {
@@ -30,7 +34,7 @@ class Program
                 gameOver = true;
             }
             
-            for (int i = 0; i < snaikTailLength; i++)
+            for (int i = 0; i < snakeTailLength; i++)
             {
                 if (snakeTailX[i] == controller._pawn.GetHeadPositionX() &&
                     snakeTailY[i] == controller._pawn.GetHeadPositionY())
@@ -39,60 +43,78 @@ class Program
                 }
             }
             
-            for (int i = 0; i < Width + 2; i++)
-            {
-                Console.WriteLine("-");
-            }
+            Draw(controller, fruitY, fruitX, snakeTailLength, snakeTailX, snakeTailY);
+            
 
-            Console.WriteLine("\n");
-
-            for (int i = 0; i < Height + 2; i++)
-            {
-                for (int j = 0; j < Width + 2; j++)
-                {
-                    if (j == 0 || j == Width)
-                    {
-                        Console.Write("#");
-                    }
-
-                    if (i == controller._pawn.GetHeadPositionX() && j == controller._pawn.GetHeadPositionY())
-                    {
-                        Console.Write("U");
-                    }
-
-                    else if (i == fruitX && j == fruitY)
-                    {
-                        Console.Write("*");
-                    }
-
-                    else
-                    {
-                        bool prTail = false;
-                        for (int k = 0; k < snaikTailLength; k++)
-                        {
-                            if (snakeTailX[k] == j && snakeTailY[k] == i)
-                            {
-                                Console.Write("H");
-                                prTail = true;
-                            }
-                        }
-
-                        if (!prTail)
-                        {
-                            Console.Write(" ");
-                        }
-                    }
-
-                    Console.Write("\n");
-                }
-            }
-
-            for (int i = 0; i < Width + 2; i++)
-            {
-                Console.WriteLine("-");
-            }
-            Console.WriteLine("\n");
+            snakeTailLength = Logic(controller, fruitX, fruitY, snakeTailLength);
         }
+    }
+
+    private static int Logic(Controller controller, int fruitX, int fruitY, int snakeTailLength)
+    {
+        if (controller._pawn.GetHeadPositionX() == fruitX && controller._pawn.GetHeadPositionY() == fruitY)
+        {
+            snakeTailLength++;
+        }
+
+        return snakeTailLength;
+    }
+
+    private static void Draw(Controller controller, int fruitY, int fruitX, int snakeTailLength, int[] snakeTailX,
+        int[] snakeTailY)
+    {
+        for (int i = 0; i < Width + 2; i++)
+        {
+            Console.WriteLine("-");
+        }
+
+        Console.WriteLine("\n");
+
+        for (int i = 0; i < Height; i++)
+        {
+            for (int j = 0; j < Width; j++)
+            {
+                if (j == 0 || j == Width)
+                {
+                    Console.Write("#");
+                }
+
+                if (i == controller._pawn.GetHeadPositionY() && j == controller._pawn.GetHeadPositionX())
+                {
+                    Console.Write("U");
+                }
+
+                else if (i == fruitY && j == fruitX)
+                {
+                    Console.Write("*");
+                }
+
+                else
+                {
+                    bool prTail = false;
+                    for (int k = 0; k < snakeTailLength; k++)
+                    {
+                        if (snakeTailX[k] == j && snakeTailY[k] == i)
+                        {
+                            Console.Write("H");
+                            prTail = true;
+                        }
+                    }
+
+                    if (!prTail)
+                    {
+                        Console.Write(" ");
+                    }
+                }
+
+                Console.Write("\n");
+            }
+        }
+        for (int i = 0; i < Width + 2; i++)
+        {
+            Console.WriteLine("-");
+        }
+        Console.WriteLine("\n");
     }
 }
 
