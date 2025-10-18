@@ -6,15 +6,15 @@ class Program
 {
     public const int Height = 20;
     public const int Width = 40;
+    
+    private static readonly Controller Controller = Controller.Instance;
+    private static readonly GameManager GameManager = GameManager.Instance;
+    private static bool _gameOver = false;
 
     private static void Main()
     {
+        GameManager.Start();
         //Console.WriteLine("Hello World!");
-        Controller controller = new Controller();
-        
-        controller._pawn.SetHeadPositionX(Width / 2);
-        controller._pawn.SetHeadPositionY(Height / 2);
-        bool gameOver = false;
 
         int snakeTailLength = 0;
         int [] snakeTailX = new int[100];
@@ -23,30 +23,27 @@ class Program
         int fruitX = 0;
         int fruitY = 0;
 
-        GameManager gameManager = new GameManager();
-        //gameManager.Start();
-
-        while (!gameOver)
+        while (!_gameOver)
         {
-            if (controller._pawn.GetHeadPositionX() < 0 || controller._pawn.GetHeadPositionX() >= Width ||
-                controller._pawn.GetHeadPositionY() < 0 || controller._pawn.GetHeadPositionY() >= Height)
+            if (Controller._pawn.GetHeadPositionX() < 0 || Controller._pawn.GetHeadPositionX() >= Width ||
+                Controller._pawn.GetHeadPositionY() < 0 || Controller._pawn.GetHeadPositionY() >= Height)
             {
-                gameOver = true;
+                _gameOver = true;
             }
             
             for (int i = 0; i < snakeTailLength; i++)
             {
-                if (snakeTailX[i] == controller._pawn.GetHeadPositionX() &&
-                    snakeTailY[i] == controller._pawn.GetHeadPositionY())
+                if (snakeTailX[i] == Controller._pawn.GetHeadPositionX() &&
+                    snakeTailY[i] == Controller._pawn.GetHeadPositionY())
                 {
-                    gameOver = true;
+                    _gameOver = true;
                 }
             }
             
-            Draw(controller, fruitY, fruitX, snakeTailLength, snakeTailX, snakeTailY);
+            Draw(Controller, fruitY, fruitX, snakeTailLength, snakeTailX, snakeTailY);
             
 
-            snakeTailLength = Logic(controller, fruitX, fruitY, snakeTailLength);
+            snakeTailLength = Logic(Controller, fruitX, fruitY, snakeTailLength);
         }
     }
 
@@ -65,14 +62,14 @@ class Program
     {
         for (int i = 0; i < Width + 2; i++)
         {
-            Console.WriteLine("-");
+            Console.Write("-");
         }
 
-        Console.WriteLine("\n");
+        Console.Write("\n");
 
         for (int i = 0; i < Height; i++)
         {
-            for (int j = 0; j < Width; j++)
+            for (int j = 0; j <= Width; j++)
             {
                 if (j == 0 || j == Width)
                 {
@@ -106,15 +103,16 @@ class Program
                         Console.Write(" ");
                     }
                 }
-
-                Console.Write("\n");
+                
             }
+            Console.Write("\n");
         }
+        
         for (int i = 0; i < Width + 2; i++)
         {
-            Console.WriteLine("-");
+            Console.Write("-");
         }
-        Console.WriteLine("\n");
+        Console.Write("\n");
     }
 }
 
