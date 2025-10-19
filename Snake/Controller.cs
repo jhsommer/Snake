@@ -2,49 +2,60 @@ namespace Snake;
 
 public class Controller
 {
+    private static Controller instance;
+    public static Controller Instance => instance ??= new Controller();
     
-    internal Snake _pawn =  new Snake();
+    private bool _wasInitialized;
+    internal Snake Pawn;
+
+    private Controller()
+    {
+        
+    }
 
     public void Initialize()
     {
-        Main();
+        if (_wasInitialized) 
+            return;
+        
+        Pawn.SetPlayerStart();
+        _wasInitialized = true;
+        //Main();
     }
 
-    void Main()
+    public void SetPawn(Snake _pawn)
     {
-        ConsoleKeyInfo keyInfo;
-        while (true)
+        Pawn = _pawn;
+    }
+
+    public void HandleInput()
+    {
+        if(!Console.KeyAvailable)
+            return;
+        
+        ConsoleKey key = Console.ReadKey(true).Key;
+
+        switch (key)
         {
-            int X = _pawn.GetHeadPositionX();
-            int Y = _pawn.GetHeadPositionY();
+            case ConsoleKey.UpArrow :
+                GameManager.Instance.MovePlayer(Directions.Up);
+                break;
             
-            if (Console.KeyAvailable)
-            {
-                keyInfo = Console.ReadKey(true);
-                switch (keyInfo.Key)
-                {
-                    case ConsoleKey.UpArrow:
-                        _pawn.SetHeadPositionX(X--);
-                        Console.WriteLine("Up");
-                        break;
-                    
-                    case ConsoleKey.DownArrow:
-                        _pawn.SetHeadPositionX(X++);
-                        Console.WriteLine("Down");
-                        break;
-                    
-                    case ConsoleKey.LeftArrow:
-                        _pawn.SetHeadPositionY(Y--);
-                        Console.WriteLine("Left");
-                        break;
-                    
-                    case ConsoleKey.RightArrow:
-                        _pawn.SetHeadPositionY(Y++);
-                        Console.WriteLine("Right");
-                        break;
-                }
-            }
-            Thread.Sleep(100);
+            case ConsoleKey.DownArrow :
+                GameManager.Instance.MovePlayer(Directions.Down);
+                break;
+            
+            case ConsoleKey.LeftArrow :
+                GameManager.Instance.MovePlayer(Directions.Left);
+                break;
+            
+            case ConsoleKey.RightArrow :
+                GameManager.Instance.MovePlayer(Directions.Right);
+                break;
+            
+            default:
+                break;
         }
     }
+    
 }

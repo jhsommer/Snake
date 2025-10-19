@@ -14,6 +14,7 @@ class Program
     private static void Main()
     {
         GameManager.Start();
+        Controller.HandleInput();
         //Console.WriteLine("Hello World!");
 
         int snakeTailLength = 0;
@@ -25,16 +26,16 @@ class Program
 
         while (!_gameOver)
         {
-            if (Controller._pawn.GetHeadPositionX() < 0 || Controller._pawn.GetHeadPositionX() >= Width ||
-                Controller._pawn.GetHeadPositionY() < 0 || Controller._pawn.GetHeadPositionY() >= Height)
+            if (Controller.Pawn.GetHeadPositionX() < 0 || Controller.Pawn.GetHeadPositionX() >= Width ||
+                Controller.Pawn.GetHeadPositionY() < 0 || Controller.Pawn.GetHeadPositionY() >= Height)
             {
                 _gameOver = true;
             }
             
             for (int i = 0; i < snakeTailLength; i++)
             {
-                if (snakeTailX[i] == Controller._pawn.GetHeadPositionX() &&
-                    snakeTailY[i] == Controller._pawn.GetHeadPositionY())
+                if (snakeTailX[i] == Controller.Pawn.GetHeadPositionX() &&
+                    snakeTailY[i] == Controller.Pawn.GetHeadPositionY())
                 {
                     _gameOver = true;
                 }
@@ -49,7 +50,7 @@ class Program
 
     private static int Logic(Controller controller, int fruitX, int fruitY, int snakeTailLength)
     {
-        if (controller._pawn.GetHeadPositionX() == fruitX && controller._pawn.GetHeadPositionY() == fruitY)
+        if (controller.Pawn.GetHeadPositionX() == fruitX && controller.Pawn.GetHeadPositionY() == fruitY)
         {
             snakeTailLength++;
         }
@@ -76,7 +77,7 @@ class Program
                     Console.Write("#");
                 }
 
-                if (i == controller._pawn.GetHeadPositionY() && j == controller._pawn.GetHeadPositionX())
+                if (i == controller.Pawn.GetHeadPositionY() && j == controller.Pawn.GetHeadPositionX())
                 {
                     Console.Write("U");
                 }
