@@ -2,8 +2,16 @@ namespace Snake;
 
 public class Controller
 {
-    private static Controller instance;
-    public static Controller Instance => instance ??= new Controller();
+    private static Controller _instance = null!;
+
+    public static Controller Instance
+    {
+        get
+        {
+            _instance = new Controller();
+            return _instance;
+        }
+    }
     
     private bool _wasInitialized;
     internal Snake Pawn;
