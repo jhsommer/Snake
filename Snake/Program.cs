@@ -1,13 +1,40 @@
 ﻿using System;
 namespace Snake;
 
+public class DoOnce
+{
+    private bool done = false;
+
+    public void Do(Action action)
+    {
+        if(done) return;
+        
+        done = true;
+        action();
+    }
+
+    public void Reset()
+    {
+        done = false;
+    }
+}
+
 
 class Program
 {
+    public static DoOnce _doOnce = new DoOnce();
     public const int Height = 20;
     public const int Width = 40;
+    private static readonly Random _random = new Random();
     
     public static float CountTicks = 0;
+    private static int snakeTailLength = 0;
+    private static int [] snakeTailX = new int[100];
+    private static int [] snakeTailY = new int[100];
+    private static int _score = 0;
+    
+    private static int fruitX = _random.Next(1, 100) % Width;
+    private static int fruitY = _random.Next(1, 100) % Height;
     
     private static Controller _controller;
     private static readonly GameManager GameManager = GameManager.Instance;
@@ -20,28 +47,18 @@ class Program
         GameManager.Start();
         _controller = GameManager._controller;
         Console.CursorVisible = false;
-        
-        
-        
-        Console.WriteLine("Hello World!");
-
-        int snakeTailLength = 0;
-        int [] snakeTailX = new int[100];
-        int [] snakeTailY = new int[100];
-        
-        int fruitX = 0;
-        int fruitY = 0;
 
         while (!_gameOver)
         {
+            
             CountTicks++;
-                
             
             _controller.HandleInput();
             
             if( CountTicks == 20.0f)
             {
                 _controller.Pawn.Move();
+                _doOnce.Reset();
                 CountTicks = 0;
             }
             
@@ -62,27 +79,55 @@ class Program
             }
             
             
-            Draw(_controller, fruitY, fruitX, snakeTailLength, snakeTailX, snakeTailY);
-            
-
-            snakeTailLength = Logic(_controller, fruitX, fruitY, snakeTailLength);
+            Draw(_controller,snakeTailX, snakeTailY);
+            Logic(_controller);
         }
     }
 
-    private static int Logic(Controller controller, int fruitX, int fruitY, int snakeTailLength)
+    private static void Logic(Controller controller)
     {
+        snakeTailX[0] = controller.Pawn.GetHeadPositionX();
+        snakeTailY[0] = controller.Pawn.GetHeadPositionY();
+        
+        int prevX = snakeTailX[0];
+        int prevY = snakeTailY[0];
+
+        int prev2X;
+        int prev2Y;
+
+        for (int i = 0; i < snakeTailLength; i++)
+        {
+            prev2X = snakeTailX[i];
+            prev2Y = snakeTailY[i];
+            
+            snakeTailX[i] = prevX;
+            snakeTailY[i] = prevY;
+
+            prevX = prev2X;
+            prevY = prev2Y;
+        }
+        
         if (controller.Pawn.GetHeadPositionX() == fruitX && controller.Pawn.GetHeadPositionY() == fruitY)
         {
-            snakeTailLength++;
+            _doOnce.Do(() => FruitCollected());
         }
-
-        return snakeTailLength;
+        
     }
 
-    private static void Draw(Controller controller, int fruitY, int fruitX, int snakeTailLength, int[] snakeTailX,
+    private static void FruitCollected()
+    {
+        snakeTailLength++;
+        _score += 10;
+        
+        fruitX = _random.Next(1, 100) % Width;
+        fruitY = _random.Next(1, 100) % Height;
+    }
+
+    private static void Draw(Controller controller, int[] snakeTailX,
         int[] snakeTailY)
     {
         Console.SetCursorPosition(0, 0);
+        Console.WriteLine(_score);
         
         for (int i = 0; i < Width + 2; i++)
         {
