@@ -28,10 +28,10 @@ class Program
     private static readonly Random _random = new Random();
     
     public static float CountTicks = 0;
-    private static int TailSpawnTicks = 0;
+   
     private static int snakeTailLength = 0;
-    private static int [] snakeTailX = new int[100];
-    private static int [] snakeTailY = new int[100];
+   //private static int [] snakeTailX = new int[100];
+   //private static int [] snakeTailY = new int[100];
     private static int _score = 0;
     
     private static Controller _controller;
@@ -50,7 +50,6 @@ class Program
         {
             
             CountTicks++;
-            TailSpawnTicks++;
             
             _controller.HandleInput();
             
@@ -62,7 +61,7 @@ class Program
             if( CountTicks == 20.0f)
             {
                 _controller.Pawn.Move();
-                Logic(_controller);
+                //Logic(_controller);
                 
                 _doOnce.Reset();
                 
@@ -76,40 +75,31 @@ class Program
                 _gameOver = true;
             }
             
-            for (int i = 0; i < snakeTailLength; i++)
-            {
-                if (snakeTailX[i] == _controller.Pawn.GetHeadPositionX() &&
-                    snakeTailY[i] == _controller.Pawn.GetHeadPositionY())
-                {
-                    _gameOver = true;
-                }
-            }
+            _gameOver = _controller.Pawn.CollidesWithSelf();
             
             Draw(_controller);
 
         }
     }
 
-    private static void Logic(Controller controller)
-    {
-            for (int i = snakeTailLength -1; i > 0; i--)
-            {
-                snakeTailX[i]= snakeTailX[i - 1];
-                snakeTailY[i]= snakeTailY[i - 1];
-                
-            }
-        
-            snakeTailX[0] = controller.Pawn.GetPreviousHeadPositionX();
-            snakeTailY[0] = controller.Pawn.GetPreviousHeadPositionY();
-            
-        
-    }
+    // private static void Logic(Controller controller)
+    // {
+    //         for (int i = controller.Pawn.SnakeLength -1; i > 0; i--)
+    //         {
+    //             snakeTailX[i]= snakeTailX[i - 1];
+    //             snakeTailY[i]= snakeTailY[i - 1];
+    //         }
+    //     
+    //         snakeTailX[0] = controller.Pawn.GetPreviousHeadPositionX();
+    //         snakeTailY[0] = controller.Pawn.GetPreviousHeadPositionY();
+    //         
+    // }
 
     private static void FruitCollected()
     {
         _score += 10;
         GameManager._fruit.CreateFruit();
-        snakeTailLength++;
+        _controller.Pawn.Grow();
     }
 
     private static void Draw(Controller controller)
@@ -147,9 +137,10 @@ class Program
                 else
                 {
                     bool prTail = false;
-                    for (int k = 0; k < snakeTailLength; k++)
+                    for (int k = 0; k < _controller.Pawn.Body.Count; k++)
                     {
-                        if (snakeTailX[k] == j && snakeTailY[k] == i)
+                        
+                        if (_controller.Pawn.Body[k] == (j, i))
                         {
                             //Console.Write((j, k));
                             Console.Write("H");

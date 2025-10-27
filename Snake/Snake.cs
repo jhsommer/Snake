@@ -8,10 +8,25 @@ public class Snake
     private Directions _currentDirection = Directions.Start;
     private Controller _controller = null!;
     
+    private readonly List<(int X, int Y)> _body = new List<(int X, int Y)>();
+    public IReadOnlyList<(int X, int Y)> Body => _body.AsReadOnly();
+    
     public void ChangeDirection(Directions direction)
     {
         _currentDirection = direction;
-        Move();
+        //Move();
+    }
+
+    public bool CollidesWithSelf()
+    {
+        for (int i = 0; i < _body.Count; i++)
+        {
+            if (_body[i] == (_headPositionX, _headPositionY))
+            {
+                return true;
+            }
+        }
+        return false;
     }
     
     public void Initialize()
@@ -46,6 +61,7 @@ public class Snake
     
     public void Move()
     {
+        Console.Write(_body.Count);
         prevHeadX = _headPositionX;
         prevHeadY = _headPositionY;
         
@@ -67,13 +83,35 @@ public class Snake
                 _headPositionX++;
                 break;
         }
+        
+        for (int i = _body.Count -1; i > 0; i--)
+        {
+            _body[i] = _body[i - 1];
+        }
+        
+        if (_body.Count > 0)
+        {
+            _body[0] = (prevHeadX,  prevHeadY);
+        }
+
     }
 
+    public void Grow()
+    {
+        if (_body.Count > 0)
+        {
+            _body.Insert(0, (prevHeadX,  prevHeadY));
+        }
+        else if (_body.Count == 0)
+        {
+            _body.Add((prevHeadX,  prevHeadY));
+        }
+    }
+    
     public void SetPlayerStart()
     {
         _headPositionX = Program.Width / 2;
         _headPositionY = Program.Height / 2;
     }
-
-
+    
 }
