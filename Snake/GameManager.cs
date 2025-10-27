@@ -7,15 +7,13 @@ public class GameManager
     private bool _wasInitialized;
     
     internal Controller _controller;
-    private Fruit[] _fruits;
+    internal Fruit _fruit;
 
     private GameManager()
     { 
         _wasInitialized =  false;
-        
         _controller =  Controller.Instance;
-        
-        _fruits =  new Fruit[20];
+       _fruit = new Fruit();
     }
 
     public void MovePlayer(Directions direction)
@@ -30,7 +28,7 @@ public class GameManager
             return;
         
         _controller.Initialize();
-        
+        _fruit.CreateFruit();
         _wasInitialized =  true;
     }
     

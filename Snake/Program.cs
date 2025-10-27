@@ -34,9 +34,6 @@ class Program
     private static int [] snakeTailY = new int[100];
     private static int _score = 0;
     
-    private static int fruitX = _random.Next(1, 100) % Width;
-    private static int fruitY = _random.Next(1, 100) % Height;
-    
     private static Controller _controller;
     private static readonly GameManager GameManager = GameManager.Instance;
     private static bool _gameOver = false;
@@ -57,7 +54,7 @@ class Program
             
             _controller.HandleInput();
             
-            if (_controller.Pawn.GetHeadPositionX() == fruitX && _controller.Pawn.GetHeadPositionY() == fruitY)
+            if (_controller.Pawn.GetHeadPositionX() == GameManager._fruit._x && _controller.Pawn.GetHeadPositionY() == GameManager._fruit._y)
             {
                 _doOnce.Do(() => FruitCollected());
             }
@@ -111,10 +108,7 @@ class Program
     private static void FruitCollected()
     {
         _score += 10;
-        
-        fruitX = _random.Next(1, 100) % Width;
-        fruitY = _random.Next(1, 100) % Height;
-        
+        GameManager._fruit.CreateFruit();
         snakeTailLength++;
     }
 
@@ -145,7 +139,7 @@ class Program
                     //Console.Write((i, j));
                 }
 
-                else if (i == fruitY && j == fruitX)
+                else if (i == GameManager._fruit._y && j == GameManager._fruit._x)
                 {
                     Console.Write("*");
                 }
