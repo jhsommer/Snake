@@ -57,12 +57,16 @@ class Program
             
             _controller.HandleInput();
             
-            Draw(_controller);
-            Logic(_controller);
+            if (_controller.Pawn.GetHeadPositionX() == fruitX && _controller.Pawn.GetHeadPositionY() == fruitY)
+            {
+                _doOnce.Do(() => FruitCollected());
+            }
             
             if( CountTicks == 20.0f)
             {
                 _controller.Pawn.Move();
+                Logic(_controller);
+                
                 _doOnce.Reset();
                 
                 CountTicks = 0;
@@ -84,7 +88,7 @@ class Program
                 }
             }
             
-            
+            Draw(_controller);
 
         }
     }
@@ -101,10 +105,6 @@ class Program
             snakeTailX[0] = controller.Pawn.GetPreviousHeadPositionX();
             snakeTailY[0] = controller.Pawn.GetPreviousHeadPositionY();
             
-        if (controller.Pawn.GetHeadPositionX() == fruitX && controller.Pawn.GetHeadPositionY() == fruitY)
-        {
-            _doOnce.Do(() => FruitCollected());
-        }
         
     }
 
