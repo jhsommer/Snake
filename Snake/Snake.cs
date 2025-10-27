@@ -2,6 +2,7 @@ namespace Snake;
 
 public class Snake
 {
+    private int prevHeadX, prevHeadY;
     private int _headPositionX =  1;
     private int _headPositionY = 1;
     private Directions _currentDirection = Directions.Start;
@@ -28,6 +29,16 @@ public class Snake
         return _headPositionY;
     }
 
+    public int GetPreviousHeadPositionX()
+    {
+        return prevHeadX;
+    }
+
+    public int GetPreviousHeadPositionY()
+    {
+        return prevHeadY;
+    }
+
     void PossessedBy(Controller newController)
     {
         _controller = newController;
@@ -35,6 +46,9 @@ public class Snake
     
     public void Move()
     {
+        prevHeadX = _headPositionX;
+        prevHeadY = _headPositionY;
+        
         switch (_currentDirection)
         {
             case Directions.Up:

@@ -28,6 +28,7 @@ class Program
     private static readonly Random _random = new Random();
     
     public static float CountTicks = 0;
+    private static int TailSpawnTicks = 0;
     private static int snakeTailLength = 0;
     private static int [] snakeTailX = new int[100];
     private static int [] snakeTailY = new int[100];
@@ -52,13 +53,18 @@ class Program
         {
             
             CountTicks++;
+            TailSpawnTicks++;
             
             _controller.HandleInput();
+            
+            Draw(_controller);
+            Logic(_controller);
             
             if( CountTicks == 20.0f)
             {
                 _controller.Pawn.Move();
                 _doOnce.Reset();
+                
                 CountTicks = 0;
             }
             
@@ -79,34 +85,22 @@ class Program
             }
             
             
-            Draw(_controller,snakeTailX, snakeTailY);
-            Logic(_controller);
+
         }
     }
 
     private static void Logic(Controller controller)
     {
-        snakeTailX[0] = controller.Pawn.GetHeadPositionX();
-        snakeTailY[0] = controller.Pawn.GetHeadPositionY();
+            for (int i = snakeTailLength -1; i > 0; i--)
+            {
+                snakeTailX[i]= snakeTailX[i - 1];
+                snakeTailY[i]= snakeTailY[i - 1];
+                
+            }
         
-        int prevX = snakeTailX[0];
-        int prevY = snakeTailY[0];
-
-        int prev2X;
-        int prev2Y;
-
-        for (int i = 0; i < snakeTailLength; i++)
-        {
-            prev2X = snakeTailX[i];
-            prev2Y = snakeTailY[i];
+            snakeTailX[0] = controller.Pawn.GetPreviousHeadPositionX();
+            snakeTailY[0] = controller.Pawn.GetPreviousHeadPositionY();
             
-            snakeTailX[i] = prevX;
-            snakeTailY[i] = prevY;
-
-            prevX = prev2X;
-            prevY = prev2Y;
-        }
-        
         if (controller.Pawn.GetHeadPositionX() == fruitX && controller.Pawn.GetHeadPositionY() == fruitY)
         {
             _doOnce.Do(() => FruitCollected());
@@ -116,15 +110,15 @@ class Program
 
     private static void FruitCollected()
     {
-        snakeTailLength++;
         _score += 10;
         
         fruitX = _random.Next(1, 100) % Width;
         fruitY = _random.Next(1, 100) % Height;
+        
+        snakeTailLength++;
     }
 
-    private static void Draw(Controller controller, int[] snakeTailX,
-        int[] snakeTailY)
+    private static void Draw(Controller controller)
     {
         Console.SetCursorPosition(0, 0);
         Console.WriteLine(_score);
@@ -148,6 +142,7 @@ class Program
                 if (i == controller.Pawn.GetHeadPositionY() && j == controller.Pawn.GetHeadPositionX())
                 {
                     Console.Write("O");
+                    //Console.Write((i, j));
                 }
 
                 else if (i == fruitY && j == fruitX)
@@ -162,6 +157,7 @@ class Program
                     {
                         if (snakeTailX[k] == j && snakeTailY[k] == i)
                         {
+                            //Console.Write((j, k));
                             Console.Write("H");
                             prTail = true;
                         }
