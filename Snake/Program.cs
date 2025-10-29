@@ -25,13 +25,9 @@ class Program
     public static DoOnce _doOnce = new DoOnce();
     public const int Height = 20;
     public const int Width = 40;
-    private static readonly Random _random = new Random();
     
     public static float CountTicks = 0;
-   
-    private static int snakeTailLength = 0;
-   //private static int [] snakeTailX = new int[100];
-   //private static int [] snakeTailY = new int[100];
+
     private static int _score = 0;
     
     private static Controller _controller;
@@ -61,40 +57,19 @@ class Program
             if( CountTicks == 20.0f)
             {
                 _controller.Pawn.Move();
-                //Logic(_controller);
                 
                 _doOnce.Reset();
                 
                 CountTicks = 0;
             }
             
-            
-            if (_controller.Pawn.GetHeadPositionX() < 0 || _controller.Pawn.GetHeadPositionX() >= Width ||
-                _controller.Pawn.GetHeadPositionY() < 0 || _controller.Pawn.GetHeadPositionY() >= Height)
-            {
-                _gameOver = true;
-            }
-            
-            _gameOver = _controller.Pawn.CollidesWithSelf();
+            _gameOver = !_controller.Pawn.IsinGameField() || _controller.Pawn.CollidesWithSelf();
             
             Draw(_controller);
 
         }
     }
-
-    // private static void Logic(Controller controller)
-    // {
-    //         for (int i = controller.Pawn.SnakeLength -1; i > 0; i--)
-    //         {
-    //             snakeTailX[i]= snakeTailX[i - 1];
-    //             snakeTailY[i]= snakeTailY[i - 1];
-    //         }
-    //     
-    //         snakeTailX[0] = controller.Pawn.GetPreviousHeadPositionX();
-    //         snakeTailY[0] = controller.Pawn.GetPreviousHeadPositionY();
-    //         
-    // }
-
+    
     private static void FruitCollected()
     {
         _score += 10;
@@ -126,7 +101,6 @@ class Program
                 if (i == controller.Pawn.GetHeadPositionY() && j == controller.Pawn.GetHeadPositionX())
                 {
                     Console.Write("O");
-                    //Console.Write((i, j));
                 }
 
                 else if (i == GameManager._fruit._y && j == GameManager._fruit._x)
@@ -142,7 +116,6 @@ class Program
                         
                         if (_controller.Pawn.Body[k] == (j, i))
                         {
-                            //Console.Write((j, k));
                             Console.Write("H");
                             prTail = true;
                         }

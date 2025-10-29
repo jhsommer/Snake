@@ -28,6 +28,17 @@ public class Snake
         }
         return false;
     }
+
+    public bool IsinGameField()
+    {
+        if (_headPositionX < 0 || _headPositionY < 0 || _headPositionX >= Program.Width ||
+            _headPositionY >= Program.Height)
+        {
+            return false;
+        }
+        
+        return true;
+    }
     
     public void Initialize()
     {
