@@ -2,19 +2,17 @@ namespace Snake;
 
 public class Snake
 {
-    private int prevHeadX, prevHeadY;
+    private int _prevHeadX, _prevHeadY;
     private int _headPositionX =  1;
     private int _headPositionY = 1;
     private Directions _currentDirection = Directions.Start;
-    private Controller _controller = null!;
     
-    private readonly List<(int X, int Y)> _body = new List<(int X, int Y)>();
+    private readonly List<(int X, int Y)> _body = [];
     public IReadOnlyList<(int X, int Y)> Body => _body.AsReadOnly();
     
     public void ChangeDirection(Directions direction)
     {
         _currentDirection = direction;
-        //Move();
     }
 
     public bool CollidesWithSelf()
@@ -29,15 +27,15 @@ public class Snake
         return false;
     }
 
-    public bool IsinGameField()
+    public bool IsOutOfBounds()
     {
         if (_headPositionX < 0 || _headPositionY < 0 || _headPositionX >= Program.Width ||
             _headPositionY >= Program.Height)
         {
-            return false;
+            return true;
         }
         
-        return true;
+        return false;
     }
     
     public void Initialize()
@@ -54,27 +52,12 @@ public class Snake
     {
         return _headPositionY;
     }
-
-    public int GetPreviousHeadPositionX()
-    {
-        return prevHeadX;
-    }
-
-    public int GetPreviousHeadPositionY()
-    {
-        return prevHeadY;
-    }
-
-    void PossessedBy(Controller newController)
-    {
-        _controller = newController;
-    }
     
     public void Move()
     {
         Console.Write(_body.Count);
-        prevHeadX = _headPositionX;
-        prevHeadY = _headPositionY;
+        _prevHeadX = _headPositionX;
+        _prevHeadY = _headPositionY;
         
         switch (_currentDirection)
         {
@@ -102,7 +85,7 @@ public class Snake
         
         if (_body.Count > 0)
         {
-            _body[0] = (prevHeadX,  prevHeadY);
+            _body[0] = (_prevHeadX,  _prevHeadY);
         }
 
     }
@@ -111,15 +94,15 @@ public class Snake
     {
         if (_body.Count > 0)
         {
-            _body.Insert(0, (prevHeadX,  prevHeadY));
+            _body.Insert(0, (_prevHeadX,  _prevHeadY));
         }
         else if (_body.Count == 0)
         {
-            _body.Add((prevHeadX,  prevHeadY));
+            _body.Add((_prevHeadX,  _prevHeadY));
         }
     }
     
-    public void SetPlayerStart()
+    private void SetPlayerStart()
     {
         _headPositionX = Program.Width / 2;
         _headPositionY = Program.Height / 2;

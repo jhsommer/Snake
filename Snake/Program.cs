@@ -62,8 +62,16 @@ class Program
                 
                 CountTicks = 0;
             }
-            
-            _gameOver = !_controller.Pawn.IsinGameField() || _controller.Pawn.CollidesWithSelf();
+
+            if (_controller.Pawn.CollidesWithSelf())
+            {
+                _gameOver = true;
+            }
+
+            if (_controller.Pawn.IsOutOfBounds())
+            {
+                _gameOver = true;
+            }
             
             Draw(_controller);
 
