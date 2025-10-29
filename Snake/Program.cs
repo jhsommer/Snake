@@ -1,66 +1,65 @@
-﻿using System;
-namespace Snake;
+﻿namespace Snake;
 
 public class DoOnce
 {
-    private bool done = false;
+    private bool _done = false;
 
     public void Do(Action action)
     {
-        if(done) return;
+        if(_done) return;
         
-        done = true;
+        _done = true;
         action();
     }
 
     public void Reset()
     {
-        done = false;
+        _done = false;
     }
 }
 
 
 class Program
 {
-    public static DoOnce _doOnce = new DoOnce();
+    private static readonly DoOnce DoOnce = new DoOnce();
+    
     public const int Height = 20;
     public const int Width = 40;
-    
-    public static float CountTicks = 0;
 
+    private static float _countTicks = 0;
     private static int _score = 0;
+    private static bool _gameOver = false;
     
     private static Controller _controller;
     private static readonly GameManager GameManager = GameManager.Instance;
-    private static bool _gameOver = false;
 
     private static void Main()
     {
         
         
         GameManager.Start();
-        _controller = GameManager._controller;
+       _controller = GameManager.GetController();
         Console.CursorVisible = false;
 
         while (!_gameOver)
         {
             
-            CountTicks++;
+            _countTicks++;
             
             _controller.HandleInput();
             
-            if (_controller.Pawn.GetHeadPositionX() == GameManager._fruit._x && _controller.Pawn.GetHeadPositionY() == GameManager._fruit._y)
+            if (_controller.Pawn.GetHeadPositionX() == GameManager.GetFruit().X && _controller.Pawn.GetHeadPositionY() == GameManager.GetFruit().Y)
             {
-                _doOnce.Do(() => FruitCollected());
+                DoOnce.Do(() => FruitCollected());
             }
             
-            if( CountTicks == 20.0f)
+            if( _countTicks == 20.0f)
             {
                 _controller.Pawn.Move();
                 
-                _doOnce.Reset();
+                DoOnce.Reset();
                 
-                CountTicks = 0;
+                _countTicks = 0;
             }
 
             if (_controller.Pawn.CollidesWithSelf())
@@ -73,7 +72,7 @@ class Program
                 _gameOver = true;
             }
             
-            Draw(_controller);
+            Draw();
 
         }
     }
@@ -81,11 +80,11 @@ class Program
     private static void FruitCollected()
     {
         _score += 10;
-        GameManager._fruit.CreateFruit();
+        GameManager.GetFruit().CreateFruit();
         _controller.Pawn.Grow();
     }
 
-    private static void Draw(Controller controller)
+    private static void Draw()
     {
         Console.SetCursorPosition(0, 0);
         Console.WriteLine(_score);
@@ -94,7 +93,7 @@ class Program
         {
             Console.Write("-");
         }
-
+        
         Console.Write("\n");
 
         for (int i = 0; i < Height; i++)
@@ -106,12 +105,12 @@ class Program
                     Console.Write("#");
                 }
 
-                if (i == controller.Pawn.GetHeadPositionY() && j == controller.Pawn.GetHeadPositionX())
+                if (i == _controller.Pawn.GetHeadPositionY() && j == _controller.Pawn.GetHeadPositionX())
                 {
                     Console.Write("O");
                 }
 
-                else if (i == GameManager._fruit._y && j == GameManager._fruit._x)
+                else if (i == GameManager.GetFruit().Y && j == GameManager.GetFruit().X)
                 {
                     Console.Write("*");
                 }

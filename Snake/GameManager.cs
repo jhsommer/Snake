@@ -4,10 +4,11 @@ public class GameManager
 {
     private static GameManager instance;
     public static GameManager Instance => instance ??= new GameManager();
+    
     private bool _wasInitialized;
     
-    internal Controller _controller;
-    internal Fruit _fruit;
+    private Controller _controller;
+    private Fruit _fruit;
 
     private GameManager()
     { 
@@ -16,6 +17,16 @@ public class GameManager
        _fruit = new Fruit();
     }
 
+    public Fruit GetFruit()
+    {
+        return _fruit;
+    }
+
+    public Controller GetController()
+    {
+        return _controller;
+    }
+    
     public void MovePlayer(Directions direction)
     {
         _controller.Pawn.ChangeDirection(direction);

@@ -14,7 +14,8 @@ public class Controller
     }
     
     private bool _wasInitialized;
-    internal Snake Pawn = new();
+    
+    internal readonly Snake Pawn = new();
 
     private Controller()
     {

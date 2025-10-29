@@ -3,13 +3,19 @@ namespace Snake;
 
 public class Fruit
 {
-    private Random _random = new Random();
+    private readonly Random _random = new Random();
     
-    public int _x { get; private set; }
-    public int _y { get; private set; }
+    public int X { get; private set; }
+    public int Y { get; private set; }
+
+    public void Initialize()
+    {
+        CreateFruit();
+    }
+    
     public void CreateFruit()
     {
-        _x = _random.Next(1, 100) % Program.Width;
-        _y = _random.Next(1, 100) % Program.Height;
+        X = _random.Next(1, 100) % Program.Width;
+        Y = _random.Next(1, 100) % Program.Height;
     }
 }
