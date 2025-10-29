@@ -14,7 +14,7 @@ public class Controller
     }
     
     private bool _wasInitialized;
-    internal Snake Pawn = new Snake();
+    internal Snake Pawn = new();
 
     private Controller()
     {
@@ -26,18 +26,10 @@ public class Controller
         if (_wasInitialized) 
             return;
         
-        SetPawn(Pawn);
         Pawn.Initialize();
-        //Pawn.SetPlayerStart();
         _wasInitialized = true;
-        //Main();
     }
-
-    private void SetPawn(Snake pawn)
-    {
-        Pawn = pawn;
-    }
-
+    
     public void HandleInput()
     {
         if(!Console.KeyAvailable)
@@ -65,11 +57,8 @@ public class Controller
                 GameManager.Instance.MovePlayer(Directions.Right);
                 break;
             
-            default:
-                break;
         }
         
-        Thread.Sleep(100);
     }
     
 }
