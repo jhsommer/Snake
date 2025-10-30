@@ -1,6 +1,6 @@
 namespace Snake;
 
-public class Snake
+public class Snake : IRendable
 {
     private int _prevHeadX, _prevHeadY;
     private int _headPositionX =  1;
@@ -55,7 +55,7 @@ public class Snake
     
     public void Move()
     {
-        Console.Write(_body.Count);
+        //Console.Write(_body.Count);
         _prevHeadX = _headPositionX;
         _prevHeadY = _headPositionY;
         
@@ -107,5 +107,10 @@ public class Snake
         _headPositionX = Program.Width / 2;
         _headPositionY = Program.Height / 2;
     }
-    
+
+    public void Draw()
+    {
+        Console.SetCursorPosition(_headPositionX, _headPositionY);
+        Console.Write('O');
+    }
 }

@@ -1,7 +1,7 @@
 namespace Snake;
 
 
-public class Fruit
+public class Fruit : IRendable
 {
     private readonly Random _random = new Random();
     
@@ -17,5 +17,11 @@ public class Fruit
     {
         X = _random.Next(1, 100) % Program.Width;
         Y = _random.Next(1, 100) % Program.Height;
+    }
+
+    public void Draw()
+    {
+        Console.SetCursorPosition(X, Y);
+        Console.Write('*');
     }
 }

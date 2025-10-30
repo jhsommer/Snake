@@ -32,14 +32,19 @@ class Program
     
     private static Controller _controller;
     private static readonly GameManager GameManager = GameManager.Instance;
+    
+    private static readonly List<IRendable> Objects = [];
 
     private static void Main()
     {
-        
-        
         GameManager.Start();
        _controller = GameManager.GetController();
         Console.CursorVisible = false;
+
+        IRendable player = _controller.Pawn;
+        Objects.Add(player);
+        IRendable fruit = GameManager.GetFruit();
+        Objects.Add(fruit);
 
         while (!_gameOver)
         {
@@ -72,8 +77,11 @@ class Program
                 _gameOver = true;
             }
             
-            Draw();
-
+            DrawField();
+            foreach (var obj in Objects)
+            {
+                obj.Draw();
+            }
         }
     }
     
@@ -84,7 +92,7 @@ class Program
         _controller.Pawn.Grow();
     }
 
-    private static void Draw()
+    private static void DrawField()
     {
         Console.SetCursorPosition(0, 0);
         Console.WriteLine(_score);
@@ -104,41 +112,16 @@ class Program
                 {
                     Console.Write("#");
                 }
-
-                if (i == _controller.Pawn.GetHeadPositionY() && j == _controller.Pawn.GetHeadPositionX())
+                else 
                 {
-                    Console.Write("O");
+                    Console.Write(" ");
                 }
-
-                else if (i == GameManager.GetFruit().Y && j == GameManager.GetFruit().X)
-                {
-                    Console.Write("*");
-                }
-
-                else
-                {
-                    bool prTail = false;
-                    for (int k = 0; k < _controller.Pawn.Body.Count; k++)
-                    {
-                        
-                        if (_controller.Pawn.Body[k] == (j, i))
-                        {
-                            Console.Write("H");
-                            prTail = true;
-                        }
-                    }
-
-                    if (!prTail)
-                    {
-                        Console.Write(" ");
-                    }
-                }
-                
             }
+            
             Console.Write("\n");
         }
         
-        for (int i = 0; i < Width + 2; i++)
+        for (int i = 0; i < Width + 1; i++)
         {
             Console.Write("-");
         }
