@@ -53,10 +53,6 @@ This largely decouples the classes from each other and makes the system expandab
 - The rendering has been moved to the Snake and Fruit classes.
 - This has made it possible to separate the game logic more clearly, even though there is still some flickering at present because the playing field is completely redrawn for each frame.
 
-#### Logic & Bugs
-- A minor bug occurs when collecting fruit: the snake's new body segment initially appears at the position of the head and only then attaches itself correctly to the body.
-- The exact error has not yet been fully identified, as it is only cosmetic and does not make the game unplayable.
-
 #### Object orientation & controllers
 - The Controller class is responsible for processing input and communicates with the GameManager.
 - The GameManager then passes this input to the Snake to trigger movement.
@@ -74,6 +70,13 @@ This makes it easy to add new objects if they implement the interface.
   The GameManager and Controller were implemented as a singleton to enable global access similar to larger game engines.
 - **Separation of logic and presentation**:  
   The game logic (movement, collision, etc.) is clearly separated from the presentation.
+
+### Tests
+Three unit tests were implemented to verify core functions:  
+- Movement of the snake
+- Collision detection with walls
+- Collecting fruit
+
 ### Conclusion
 The project was successfully implemented.
 Despite a few known minor bugs (e.g., when new body parts appear), the game logic is stable and comprehensible.  
