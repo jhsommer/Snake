@@ -95,7 +95,6 @@ public class Program
     private static void DrawField()
     {
         Console.SetCursorPosition(0, 0);
-        Console.WriteLine(_score);
         
         for (int i = 0; i < Width + 2; i++)
         {
@@ -126,6 +125,7 @@ public class Program
             Console.Write("-");
         }
         Console.Write("\n");
+        Console.WriteLine(_score);
     }
 }
 

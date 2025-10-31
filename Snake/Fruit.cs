@@ -23,8 +23,8 @@ public class Fruit : IRendable
     
     public void CreateFruit()
     {
-        X = _random.Next(1, 50) % Program.Width;
-        Y = _random.Next(1, 50) % Program.Height;
+        X = _random.Next(2, 39);
+        Y = _random.Next(2, 19);;
     }
 
     public void Draw()
