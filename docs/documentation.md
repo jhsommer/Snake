@@ -16,10 +16,11 @@ Important requirements were:
 I chose the game Snake because I am already familiar with it and it is very well suited for a small but clean object-oriented implementation.
 
 ### Planing
-During the planning phase, I first created a class diagram to plan the basic structure of the project.
+During the planning phase, I first created a class diagram to plan the basic structure of the project.  
+
 Here is my class diagram from the planning phase:
 
-![class diagram](./docs/images/SoftwareEngineering.drawio.png)
+![class diagram](./images/SoftwareEngineering.drawio.png)
 
 The goal was to achieve clean interaction between the GameManager, Snake, Fruit, Controller, and Program classes.
 Particular attention was paid to separating game logic, input, and rendering.
