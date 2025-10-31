@@ -2,8 +2,16 @@ namespace Snake;
 
 public class GameManager
 {
-    private static GameManager instance;
-    public static GameManager Instance => instance ??= new GameManager();
+    private static GameManager _instance = null!;
+
+    public static GameManager Instance
+    {
+        get
+        {
+            _instance = new GameManager();
+            return _instance;
+        }
+    }
     
     private bool _wasInitialized;
     

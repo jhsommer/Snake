@@ -30,7 +30,7 @@ public class Program
     private static int _score = 0;
     private static bool _gameOver = false;
     
-    private static Controller _controller;
+    private static Controller _controller = null!;
     private static readonly GameManager GameManager = GameManager.Instance;
     
     private static readonly List<IRendable> Objects = [];
