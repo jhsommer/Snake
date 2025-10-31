@@ -19,7 +19,7 @@ public class DoOnce
 }
 
 
-class Program
+public class Program
 {
     private static readonly DoOnce DoOnce = new DoOnce();
     
