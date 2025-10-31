@@ -112,5 +112,11 @@ public class Snake : IRendable
     {
         Console.SetCursorPosition(_headPositionX, _headPositionY);
         Console.Write('O');
+
+        foreach (var segment in Body)
+        {
+            Console.SetCursorPosition(segment.X, segment.Y);
+            Console.Write("H");
+        }
     }
 }
